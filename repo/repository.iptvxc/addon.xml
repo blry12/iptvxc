@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.iptvxc" name="[B][COLOR red]XCUI Streams[/B][/COLOR]" provider-name="[B][COLOR orange]Fire TV Guru[/B][/COLOR" version="1.0.0">
+<addon id="repository.iptvxc" name="[B][COLOR orange]IPTVXC[/B][/COLOR]" provider-name="[B][COLOR orange]Fire TV Guru[/B][/COLOR" version="1.0.0">
     <extension point="xbmc.addon.repository" name="IPTVXC Repository">
     <dir>
             <info compressed="false">https://raw.githubusercontent.com/blry12/iptvxc/master/repo/zips/addons.xml</info>
