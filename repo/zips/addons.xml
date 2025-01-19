@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<addons><addon id="plugin.video.iptvxc.beta" name="[B][COLOR red]XCUI Streams Beta[/B][/COLOR]" version="3.2.005" provider-name="[B][COLOR orange]Fire TV Guru[/B][/COLOR]">
+<addons><addon id="plugin.video.iptvxc.beta" name="[B][COLOR red]XCUI Streams Beta[/B][/COLOR]" version="3.2.007" provider-name="[B][COLOR orange]Fire TV Guru[/B][/COLOR]">
   <extension point="xbmc.python.pluginsource" library="default.py">
 		<provides>video</provides>
   </extension>

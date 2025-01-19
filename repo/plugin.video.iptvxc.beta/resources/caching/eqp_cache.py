@@ -12,7 +12,9 @@ from urllib.parse import urlparse, parse_qs
 import sqlite3
 import threading
 import xml.etree.ElementTree as ET
-from datetime import datetime, timedelta
+
+from datetime import datetime, timezone, timedelta
+
 from concurrent.futures import ThreadPoolExecutor
 	#Addon Specific
 from resources.modules import control,tools, variables
@@ -103,23 +105,35 @@ class EPGUpdater:
 			return None
 
 
-	def parse_xmltv_time(self, time_str):
 
-		""" Convert the XMLTV time format to Unix timestamp, including timezone handling """
+	def parse_xmltv_time(self, time_str):
+		"""Convert the XMLTV time format to a Unix timestamp, handling timezones."""
 		try:
 			time_str_parts = time_str.split(" ")
 			if len(time_str_parts) != 2:
 				raise ValueError(f"Invalid time format (missing timezone): {time_str}")
+			
 			time_without_tz = time_str_parts[0]
 			timezone_str = time_str_parts[1]
-			if timezone_str != "+0000":
-				raise ValueError(f"Unsupported timezone {timezone_str}, expected +0000")
-			struct_time = time.strptime(time_without_tz, "%Y%m%d%H%M%S")
-			timestamp = calendar.timegm(struct_time)
-			return int(timestamp)
+
+			if len(timezone_str) != 5 or (timezone_str[0] not in ['+', '-']):
+				raise ValueError(f"Invalid timezone format: {timezone_str}")
+
+			tz_sign = 1 if timezone_str[0] == '+' else -1
+			tz_hours = int(timezone_str[1:3])
+			tz_minutes = int(timezone_str[3:5])
+			tz_offset = tz_sign * (tz_hours * 60 + tz_minutes)
+
+			tz_info = timezone(timedelta(minutes=tz_offset))
+			dt = datetime.strptime(time_without_tz, "%Y%m%d%H%M%S")
+			dt_with_tz = dt.replace(tzinfo=tz_info)
+			dt_utc = dt_with_tz.astimezone(timezone.utc)
+			return int(dt_utc.timestamp())
+		
 		except ValueError as e:
 			print(f"Error parsing time: {time_str}, exception: {str(e)}")
 			return None
+
 
 
 	def fetch_and_cache_xmltv(self):
